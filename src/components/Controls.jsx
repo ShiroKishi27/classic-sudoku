@@ -15,7 +15,7 @@ const Controls = ({
         <p className="font-bold text-[rgb(182,182,182)]">Difficulty:&nbsp;</p>
         {difficulty}
       </div>
-      <div className="my-1.5 flex items-stretch justify-center">
+      <div className="my-1.5 flex items-stretch justify-center gap-2">
         <button onClick={handleCheck} className="mx-1.5">
           <SquareCheckBig />
         </button>
