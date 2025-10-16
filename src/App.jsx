@@ -11,6 +11,7 @@ const App = () => {
   const [status, setStatus] = useState("");
   const [error, setError] = useState("");
   const [selected, setSelected] = useState(null);
+  const [difficulty, setDifficulty] = useState(null);
   useEffect(() => {
     fetchBoard({
       setError,
@@ -19,6 +20,7 @@ const App = () => {
       setSolution,
       setBoard,
       setSelected,
+      setDifficulty,
     });
   }, []);
   const handleInput = (row_index, col_index, value) => {
@@ -78,6 +80,7 @@ const App = () => {
       setSolution,
       setBoard,
       setSelected,
+      setDifficulty,
     });
   };
 
@@ -109,15 +112,20 @@ const App = () => {
               handleErase={handleErase}
               handleNewGame={handleNewGame}
               handleClick={handleClick}
+              difficulty={difficulty}
             />
           </>
         )}
         {status && (
-          <div className="absolute top-1/2 left-1/2 mt-[38px] flex h-[496px] w-[823px] -translate-x-1/2 -translate-y-1/2 flex-col items-center justify-center rounded-lg bg-white/50 text-2xl font-semibold text-gray-800 uppercase">
+          <div className="absolute top-1/2 left-1/2 mt-[38px] flex h-[496px] w-[797px] -translate-x-1/2 -translate-y-1/2 flex-col items-center justify-center rounded-lg bg-white/70 text-2xl font-semibold text-gray-800 uppercase">
             {status}
             <div className="flex flex-row gap-3 text-sm text-white">
-              <button onClick={handleReset}>Reset</button>
-              <button onClick={handleNewGame}>New Game</button>
+              <button onClick={handleReset} className="bg-black/80">
+                Reset
+              </button>
+              <button onClick={handleNewGame} className="bg-black/80">
+                New Game
+              </button>
             </div>
           </div>
         )}

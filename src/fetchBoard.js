@@ -1,5 +1,5 @@
 const SUDOKU_API =
-  "https://sudoku-api.vercel.app/api/dosuku?query={newboard(limit:1){grids{value,solution}}}";
+  "https://sudoku-api.vercel.app/api/dosuku?query={newboard(limit:1){grids{value,solution,difficulty}}}";
 export const fetchBoard = async ({
   setError,
   setStatus,
@@ -7,6 +7,7 @@ export const fetchBoard = async ({
   setSolution,
   setBoard,
   setSelected,
+  setDifficulty,
 }) => {
   setError("");
   setStatus("");
@@ -22,10 +23,14 @@ export const fetchBoard = async ({
     const solution = grid.solution.map((row) =>
       row.map((cell) => (cell === 0 ? null : cell)),
     );
+    const difficulty = grid.difficulty;
 
+    setDifficulty(difficulty);
     setPuzzle(puzzle);
     setSolution(solution);
     setBoard(puzzle.map((row) => [...row]));
+    console.log(puzzle);
+    console.log(solution);
     setSelected(null);
   } catch (e) {
     setError("Failed to fetch sudoku puzzle.", e);
