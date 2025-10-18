@@ -1,12 +1,14 @@
 import React from "react";
-import { Eraser, RotateCcw, Grid3x3, SquareCheckBig } from "lucide-react";
+import { Eraser, RotateCcw, Grid3x3, PencilLine } from "lucide-react";
+import clsx from "clsx";
 const Controls = ({
-  handleCheck,
   handleReset,
   handleErase,
+  handlePencilMark,
   handleNewGame,
   handleClick,
   difficulty,
+  isPencilMark,
 }) => {
   const number_buttons = [1, 2, 3, 4, 5, 6, 7, 8, 9];
   return (
@@ -16,8 +18,11 @@ const Controls = ({
         {difficulty}
       </div>
       <div className="my-1.5 flex items-stretch justify-center gap-2">
-        <button onClick={handleCheck} className="mx-1.5">
-          <SquareCheckBig />
+        <button
+          onClick={handlePencilMark}
+          className={clsx("mx-1.5", isPencilMark ? "bg-white" : "")}
+        >
+          <PencilLine className={clsx(isPencilMark ? "text-black/80" : "")} />
         </button>
         <button onClick={handleReset} className="mx-1.5">
           <RotateCcw />
@@ -25,10 +30,6 @@ const Controls = ({
         <button onClick={handleErase} className="mx-1.5">
           <Eraser />
         </button>
-
-        {/* <button onClick={""} className="mx-1.5">
-          Pencil Mark
-        </button> */}
       </div>
       <button
         onClick={handleNewGame}
