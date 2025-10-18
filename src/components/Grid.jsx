@@ -1,6 +1,13 @@
 import clsx from "clsx";
 
-const Grid = ({ board, puzzle, selected, setSelected, handleInput }) => {
+const Grid = ({
+  board,
+  puzzle,
+  selected,
+  setSelected,
+  handleInput,
+  conflicts,
+}) => {
   return (
     <div className="rounded-lg bg-white p-3.5">
       <table className="border-collapse">
@@ -40,7 +47,11 @@ const Grid = ({ board, puzzle, selected, setSelected, handleInput }) => {
                         type="text"
                         className={clsx(
                           "h-[50px] w-[50px] cursor-default border-none text-center text-2xl outline-none focus:bg-blue-400/50 focus:caret-transparent",
-                          isPrefilled ? "text-gray-800" : "text-blue-700",
+                          conflicts.has(`${row_index}-${col_index}`)
+                            ? "bg-red-300 text-red-500"
+                            : isPrefilled
+                              ? "text-gray-800"
+                              : "text-blue-700",
                         )}
                         maxLength={1}
                         value={cell === null ? "" : cell}
