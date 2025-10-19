@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import "./App.css";
 import Grid from "./components/Grid";
 import Controls from "./components/Controls";
@@ -13,8 +13,11 @@ const App = () => {
   const [selected, setSelected] = useState(null);
   const [difficulty, setDifficulty] = useState(null);
   const [conflicts, setConflicts] = useState(new Set());
+  const hasFetchedRef = useRef(false);
 
   useEffect(() => {
+    if (hasFetchedRef.current) return;
+    hasFetchedRef.current = true;
     fetchBoard({
       setError,
       setStatus,
@@ -30,7 +33,7 @@ const App = () => {
       const newBoard = prevBoard.map((r, ri) =>
         r.map((cell, ci) =>
           ri === row && ci === col
-            ? value
+            ? value >= 1 && value <= 9
               ? parseInt(value, 10)
               : null
             : cell,
@@ -47,16 +50,7 @@ const App = () => {
     const [row, col] = selected;
     handleInput(row, col, value);
   };
-  // const handleCheck = () => {
-  //   const flatBoard = board.flat();
-  //   const flatSolution = solution.flat();
 
-  //   if (flatBoard.every((cell, i) => cell === flatSolution[i])) {
-  //     setStatus("🎉 Congratulations!! You solved it!");
-  //   } else {
-  //     setStatus("You failed");
-  //   }
-  // };
   const handleCheck = (board) => {
     if (!solution) return;
 
