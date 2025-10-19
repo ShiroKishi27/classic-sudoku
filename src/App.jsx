@@ -28,12 +28,14 @@ const App = () => {
       setDifficulty,
     });
   }, []);
+
   const handleInput = (row, col, value) => {
+    // TODO: Implement input for notes/pencil marks
     setBoard((prevBoard) => {
       const newBoard = prevBoard.map((r, ri) =>
         r.map((cell, ci) =>
           ri === row && ci === col
-            ? value >= 1 && value <= 9
+            ? value >= "1" && value <= "9"
               ? parseInt(value, 10)
               : null
             : cell,
@@ -80,6 +82,8 @@ const App = () => {
     setBoard(puzzle.map((row) => [...row]));
     setStatus("");
     setSelected(null);
+    setConflicts(new Set());
+    setIsPencilMode(false);
   };
 
   const handleErase = () => {
