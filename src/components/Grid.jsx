@@ -1,4 +1,38 @@
 import clsx from "clsx";
+import React, { memo } from "react";
+
+// Memoized Cell so React doesn't recreate every input on each keystroke
+const Cell = React.memo(function Cell({
+  cell,
+  row,
+  col,
+  isPrefilled,
+  conflicts,
+  onChange,
+  onClick,
+  onFocus,
+}) {
+  return (
+    <input
+      key={`cell-${row}-${col}`}
+      type="text"
+      className={clsx(
+        "h-[50px] w-[50px] cursor-default border-none text-center text-2xl outline-none focus:bg-blue-400/50 focus:caret-transparent",
+        conflicts.has(`${row}-${col}`)
+          ? "bg-red-300 text-red-500"
+          : isPrefilled
+            ? "text-gray-800"
+            : "text-blue-700",
+      )}
+      maxLength={1}
+      value={cell ?? ""}
+      readOnly={isPrefilled}
+      onFocus={onFocus}
+      onClick={onClick}
+      onChange={onChange}
+    />
+  );
+});
 
 const Grid = ({
   board,
@@ -43,27 +77,21 @@ const Grid = ({
                           "bg-blue-400/50",
                       )}
                     >
-                      <input
-                        type="text"
-                        className={clsx(
-                          "h-[50px] w-[50px] cursor-default border-none text-center text-2xl outline-none focus:bg-blue-400/50 focus:caret-transparent",
-                          conflicts.has(`${row_index}-${col_index}`)
-                            ? "bg-red-300 text-red-500"
-                            : isPrefilled
-                              ? "text-gray-800"
-                              : "text-blue-700",
-                        )}
-                        maxLength={1}
-                        value={cell === null ? "" : cell}
-                        readOnly={isPrefilled}
-                        onFocus={() => {
-                          setSelected([row_index, col_index]);
-                        }}
+                      <Cell
+                        key={`cell-${row_index}-${col_index}`}
+                        cell={cell}
+                        row={row_index}
+                        col={col_index}
+                        isPrefilled={isPrefilled}
+                        conflicts={conflicts}
                         onClick={() => {
                           setSelected([row_index, col_index]);
                         }}
                         onChange={(e) => {
                           handleInput(row_index, col_index, e.target.value);
+                        }}
+                        onFocus={() => {
+                          setSelected([row_index, col_index]);
                         }}
                       />
                     </td>
