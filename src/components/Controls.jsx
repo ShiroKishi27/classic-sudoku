@@ -10,12 +10,23 @@ const Controls = ({
   difficulty,
   isPencilMark,
 }) => {
-  const number_buttons = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+  const number_buttons = ["1", "2", "3", "4", "5", "6", "7", "8", "9"];
   return (
     <div className="ml-5 flex flex-col">
-      <div className="flex items-center justify-center">
-        <p className="font-bold text-[rgb(182,182,182)]">Difficulty:&nbsp;</p>
-        {difficulty}
+      <div className="flex items-center justify-around text-xs">
+        <p>
+          <span className="font-bold text-[rgb(182,182,182)]">
+            Difficulty:&nbsp;
+          </span>
+          {difficulty}
+        </p>
+        <p>
+          <span className="font-bold text-[rgb(182,182,182)]">
+            Mistakes:&nbsp;
+          </span>
+          {/*TODO: Add mistake count for a gameover status.*/}
+          ?/5
+        </p>
       </div>
       <div className="my-1.5 flex items-stretch justify-center gap-2">
         <button
@@ -42,7 +53,7 @@ const Controls = ({
           <button
             onClick={() => handleClick(btn)}
             onMouseDown={(e) => e.preventDefault()}
-            className="h-28 bg-black/50 text-2xl"
+            className="aspect-square bg-black/50 text-2xl"
             key={btn}
           >
             {btn}
