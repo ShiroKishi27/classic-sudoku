@@ -31,12 +31,15 @@ const App = () => {
 
   const handleInput = (row, col, value) => {
     // TODO: Implement input for notes/pencil marks
+    const digit = value.slice(-1);
     setBoard((prevBoard) => {
       const newBoard = prevBoard.map((r, ri) =>
         r.map((cell, ci) =>
           ri === row && ci === col
-            ? value >= "1" && value <= "9"
-              ? parseInt(value, 10)
+            ? digit >= "1" && digit <= "9"
+              ? cell === parseInt(digit, 10)
+                ? null
+                : parseInt(digit, 10)
               : null
             : cell,
         ),
@@ -50,6 +53,7 @@ const App = () => {
   const handleClick = (value) => {
     if (!selected) return;
     const [row, col] = selected;
+    if (puzzle[row][col] !== null) return;
     handleInput(row, col, value);
   };
 
@@ -98,7 +102,6 @@ const App = () => {
       );
 
       handleCheck(updated);
-
       return updated;
     });
   };
