@@ -8,8 +8,7 @@ const Cell = React.memo(function Cell({
   col,
   isPrefilled,
   conflicts,
-  onChange,
-  onClick,
+  onKeyDown,
   onFocus,
 }) {
   return (
@@ -28,8 +27,8 @@ const Cell = React.memo(function Cell({
       value={cell ?? ""}
       readOnly={isPrefilled}
       onFocus={onFocus}
-      onClick={onClick}
-      onChange={onChange}
+      onKeyDown={onKeyDown}
+      onChange={() => {}}
     />
   );
 });
@@ -84,14 +83,21 @@ const Grid = ({
                         col={col_index}
                         isPrefilled={isPrefilled}
                         conflicts={conflicts}
-                        onClick={() => {
-                          setSelected([row_index, col_index]);
-                        }}
-                        onChange={(e) => {
-                          handleInput(row_index, col_index, e.target.value);
-                        }}
                         onFocus={() => {
                           setSelected([row_index, col_index]);
+                        }}
+                        onKeyDown={(e) => {
+                          if (isPrefilled) return;
+                          if (/^[1-9]$/.test(e.key)) {
+                            e.preventDefault(); // stop double input
+                            handleInput(row_index, col_index, e.key);
+                          } else if (
+                            e.key === "Backspace" ||
+                            e.key === "Delete"
+                          ) {
+                            e.preventDefault();
+                            handleInput(row_index, col_index, "");
+                          }
                         }}
                       />
                     </td>
