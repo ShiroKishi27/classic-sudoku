@@ -1,5 +1,4 @@
-import React from "react";
-import { Eraser, RotateCcw, Grid3x3, PencilLine } from "lucide-react";
+import { Eraser, RotateCcw, Grid3x3, PencilLine, Check } from "lucide-react";
 import clsx from "clsx";
 const Controls = ({
   handleReset,
@@ -10,8 +9,8 @@ const Controls = ({
   difficulty,
   isPencilMark,
   mistakeCount,
+  numberCounts,
 }) => {
-  const number_buttons = ["1", "2", "3", "4", "5", "6", "7", "8", "9"];
   return (
     <div className="ml-5 flex flex-col">
       <div className="flex items-center justify-around text-xs">
@@ -25,7 +24,6 @@ const Controls = ({
           <span className="font-bold text-[rgb(182,182,182)]">
             Mistakes:&nbsp;
           </span>
-          {/*TODO: Add mistake count for a gameover status.*/}
           {mistakeCount}/5
         </p>
       </div>
@@ -39,7 +37,11 @@ const Controls = ({
         <button onClick={handleReset} className="mx-1.5">
           <RotateCcw />
         </button>
-        <button onClick={handleErase} className="mx-1.5">
+        <button
+          onClick={handleErase}
+          onMouseDown={(e) => e.preventDefault()}
+          className="mx-1.5"
+        >
           <Eraser />
         </button>
       </div>
@@ -50,16 +52,34 @@ const Controls = ({
         <Grid3x3 className="mr-2" /> New Game
       </button>
       <div className="mx-1.5 my-2 grid grid-cols-3 grid-rows-3 gap-3">
-        {number_buttons.map((btn) => (
-          <button
-            onClick={() => handleClick(btn)}
-            onMouseDown={(e) => e.preventDefault()}
-            className="aspect-square bg-black/50 text-2xl"
-            key={btn}
-          >
-            {btn}
-          </button>
-        ))}
+        {Object.entries(numberCounts).map(([num, count]) => {
+          const isComplete = count === 9;
+          return (
+            <button
+              key={num}
+              onClick={() => handleClick(num)}
+              onMouseDown={(e) => e.preventDefault()}
+              disabled={isComplete}
+              className={clsx(
+                "flex aspect-square items-center justify-center bg-black/50 text-2xl hover:bg-[#636363]",
+                isComplete
+                  ? "cursor-default bg-transparent opacity-50 hover:bg-transparent"
+                  : "cursor-pointer",
+              )}
+            >
+              {isComplete ? (
+                <Check
+                  className="animate-scale-in h-6 w-6 rounded-full bg-[#636363] p-1 text-white"
+                  strokeWidth={3}
+                />
+              ) : (
+                <span className="flex h-6 w-6 items-center justify-center">
+                  {num}
+                </span>
+              )}
+            </button>
+          );
+        })}
       </div>
     </div>
   );

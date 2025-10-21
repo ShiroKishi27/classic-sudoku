@@ -15,6 +15,17 @@ const App = () => {
   const [conflicts, setConflicts] = useState(new Set());
   const [mistakeCount, setMistakeCount] = useState(0);
   const hasFetchedRef = useRef(false);
+  const [numberCounts, setNumberCounts] = useState({
+    1: 0,
+    2: 0,
+    3: 0,
+    4: 0,
+    5: 0,
+    6: 0,
+    7: 0,
+    8: 0,
+    9: 0,
+  });
 
   useEffect(() => {
     if (hasFetchedRef.current) return;
@@ -34,7 +45,21 @@ const App = () => {
     if (board && solution) {
       handleCheck(board);
     }
-  }, [board]);
+
+    if (!board || !solution) return;
+
+    let newCounts = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0, 9: 0 };
+
+    board.forEach((row, r) => {
+      row.forEach((cell, c) => {
+        if (cell !== null && cell === solution[r][c]) {
+          newCounts[cell] += 1;
+        }
+      });
+    });
+
+    setNumberCounts(newCounts);
+  }, [board, solution]);
 
   const handleInput = (row, col, value) => {
     // TODO: Implement input for notes/pencil marks
@@ -171,11 +196,12 @@ const App = () => {
               difficulty={difficulty}
               isPencilMark={isPencilMode}
               mistakeCount={mistakeCount}
+              numberCounts={numberCounts}
             />
           </>
         )}
         {status && (
-          <div className="absolute top-1/2 left-1/2 mt-[38px] flex h-[522px] w-[797px] -translate-x-1/2 -translate-y-1/2 flex-col items-center justify-center rounded-lg bg-white/70 text-2xl font-semibold text-gray-800 uppercase">
+          <div className="absolute top-1/2 left-1/2 mt-[38px] flex h-[522px] w-[827px] -translate-x-1/2 -translate-y-1/2 flex-col items-center justify-center rounded-lg bg-white/70 text-2xl font-semibold text-gray-800 uppercase">
             {status}
             <div className="flex flex-row gap-3 text-sm text-white">
               <button onClick={handleReset} className="bg-black/80">
