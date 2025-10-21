@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import "./App.css";
 import Grid from "./components/Grid";
 import Controls from "./components/Controls";
@@ -13,6 +13,7 @@ const App = () => {
   const [selected, setSelected] = useState(null);
   const [difficulty, setDifficulty] = useState(null);
   const [conflicts, setConflicts] = useState(new Set());
+  const [mistakeCount, setMistakeCount] = useState(0);
   const hasFetchedRef = useRef(false);
 
   useEffect(() => {
@@ -28,6 +29,12 @@ const App = () => {
       setDifficulty,
     });
   }, []);
+
+  useEffect(() => {
+    if (board && solution) {
+      handleCheck(board);
+    }
+  }, [board]);
 
   const handleInput = (row, col, value) => {
     // TODO: Implement input for notes/pencil marks
@@ -45,8 +52,19 @@ const App = () => {
         ),
       );
 
-      handleCheck(newBoard);
       return newBoard;
+    });
+  };
+
+  const handleMistake = () => {
+    let total = 0;
+    setMistakeCount((prev) => {
+      total = prev + 1;
+      if (total >= 5) {
+        setStatus("💀 Game Over!! You failed..");
+      }
+
+      return total;
     });
   };
 
@@ -57,30 +75,30 @@ const App = () => {
     handleInput(row, col, value);
   };
 
-  const handleCheck = (board) => {
-    if (!solution) return;
+  const handleCheck = useCallback(
+    (board) => {
+      if (!solution) return;
 
-    const newConflicts = new Set();
+      let newConflicts = new Set();
 
-    board.forEach((row, r) => {
-      row.forEach((cell, c) => {
-        if (cell !== null && cell !== solution[r][c]) {
-          newConflicts.add(`${r}-${c}`); // store "r-c" as unique key
-        }
+      board.forEach((row, r) => {
+        row.forEach((cell, c) => {
+          if (cell !== null && cell !== solution[r][c]) {
+            newConflicts.add(`${r}-${c}-${cell}`); // store "r-c" as unique key
+            if (!conflicts.has(`${r}-${c}-${cell}`)) {
+              handleMistake();
+            }
+          }
+        });
       });
-    });
+      const isSolved =
+        newConflicts.size === 0 && board.flat().every((cell) => cell !== null);
+      if (isSolved) setStatus("🎉 Congratulations! You solved it!");
 
-    setConflicts(newConflicts);
-
-    const isSolved =
-      newConflicts.size === 0 && board.flat().every((cell) => cell !== null);
-
-    if (isSolved) {
-      setStatus("🎉 Congratulations! You solved it!");
-    } else {
-      setStatus("");
-    }
-  };
+      setConflicts(newConflicts);
+    },
+    [solution, conflicts],
+  );
 
   const handleReset = () => {
     setBoard(puzzle.map((row) => [...row]));
@@ -88,6 +106,7 @@ const App = () => {
     setSelected(null);
     setConflicts(new Set());
     setIsPencilMode(false);
+    setMistakeCount(0);
   };
 
   const handleErase = () => {
@@ -100,8 +119,6 @@ const App = () => {
       const updated = prev.map((row, r) =>
         row.map((cell, c) => (r === row_idx && c === col_idx ? null : cell)),
       );
-
-      handleCheck(updated);
       return updated;
     });
   };
@@ -119,6 +136,7 @@ const App = () => {
       setSelected,
       setDifficulty,
     });
+    setMistakeCount(0);
   };
 
   if (error) {
@@ -152,6 +170,7 @@ const App = () => {
               handleClick={handleClick}
               difficulty={difficulty}
               isPencilMark={isPencilMode}
+              mistakeCount={mistakeCount}
             />
           </>
         )}

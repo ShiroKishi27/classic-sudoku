@@ -17,7 +17,7 @@ const Cell = React.memo(function Cell({
       type="text"
       className={clsx(
         "h-[50px] w-[50px] cursor-default border-none text-center text-2xl outline-none focus:bg-blue-400/50 focus:caret-transparent",
-        conflicts.has(`${row}-${col}`)
+        conflicts.has(`${row}-${col}-${cell}`)
           ? "bg-red-300 text-red-500"
           : isPrefilled
             ? "text-gray-800"

@@ -9,6 +9,7 @@ const Controls = ({
   handleClick,
   difficulty,
   isPencilMark,
+  mistakeCount,
 }) => {
   const number_buttons = ["1", "2", "3", "4", "5", "6", "7", "8", "9"];
   return (
@@ -25,7 +26,7 @@ const Controls = ({
             Mistakes:&nbsp;
           </span>
           {/*TODO: Add mistake count for a gameover status.*/}
-          ?/5
+          {mistakeCount}/5
         </p>
       </div>
       <div className="my-1.5 flex items-stretch justify-center gap-2">
