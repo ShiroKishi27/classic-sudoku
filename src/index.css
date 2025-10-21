@@ -46,11 +46,21 @@ button {
   /* font-weight: 500; */
   font-family: inherit;
   /* background-color: #1a1a1a; */
-  cursor: pointer;
   transition: background-color 0.25s;
 }
-button:hover {
-  background-color: #636363;
+
+@keyframes scale-in {
+  from {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+.animate-scale-in {
+  animation: scale-in 0.5s ease-out;
 }
 
 @media (prefers-color-scheme: light) {
