@@ -30,24 +30,30 @@ const Controls = ({
       <div className="my-1.5 flex items-stretch justify-center gap-2">
         <button
           onClick={handlePencilMark}
-          className={clsx("mx-1.5", isPencilMark ? "bg-white" : "")}
+          className={clsx(
+            "mx-1.5 cursor-pointer transition-all duration-500 ease-in hover:bg-[#636363]",
+            isPencilMark ? "bg-white" : "",
+          )}
         >
           <PencilLine className={clsx(isPencilMark ? "text-black/80" : "")} />
         </button>
-        <button onClick={handleReset} className="mx-1.5">
+        <button
+          onClick={handleReset}
+          className="mx-1.5 cursor-pointer transition-all duration-500 ease-in hover:bg-[#636363]"
+        >
           <RotateCcw />
         </button>
         <button
           onClick={handleErase}
           onMouseDown={(e) => e.preventDefault()}
-          className="mx-1.5"
+          className="mx-1.5 cursor-pointer transition-all duration-500 ease-in hover:bg-[#636363]"
         >
           <Eraser />
         </button>
       </div>
       <button
         onClick={handleNewGame}
-        className="m-1.5 flex items-center justify-center bg-white font-bold text-black/80"
+        className="m-1.5 flex cursor-pointer items-center justify-center bg-white font-bold text-black/80 transition-all duration-400 ease-out hover:bg-[#333333] hover:text-white"
       >
         <Grid3x3 className="mr-2" /> New Game
       </button>
@@ -61,7 +67,7 @@ const Controls = ({
               onMouseDown={(e) => e.preventDefault()}
               disabled={isComplete}
               className={clsx(
-                "flex aspect-square items-center justify-center bg-black/50 text-2xl hover:bg-[#636363]",
+                "flex aspect-square items-center justify-center bg-black/50 text-2xl transition-all duration-500 ease-in hover:bg-[#636363]",
                 isComplete
                   ? "cursor-default bg-transparent opacity-50 hover:bg-transparent"
                   : "cursor-pointer",
