@@ -3,6 +3,8 @@ import "./App.css";
 import Grid from "./components/Grid";
 import Controls from "./components/Controls";
 import { fetchBoard } from "./fetchBoard";
+import Loading from "./components/Loading";
+import GameStatus from "./components/GameStatus";
 const App = () => {
   const [board, setBoard] = useState(null);
   const [puzzle, setPuzzle] = useState(null);
@@ -173,9 +175,7 @@ const App = () => {
       <h1 className="mb-5 text-center font-bold">Classic Sudoku</h1>
       <div className="flex flex-row items-center justify-center">
         {!board ? (
-          <div className="flex h-[496px] w-[823px] items-center justify-center rounded-lg bg-[#636363] text-2xl font-semibold text-white/80">
-            Grid Loading...
-          </div>
+          <Loading />
         ) : (
           <>
             <Grid
@@ -201,17 +201,11 @@ const App = () => {
           </>
         )}
         {status && (
-          <div className="absolute top-1/2 left-1/2 mt-[38px] flex h-[522px] w-[827px] -translate-x-1/2 -translate-y-1/2 flex-col items-center justify-center rounded-lg bg-white/70 text-2xl font-semibold text-gray-800 uppercase">
-            {status}
-            <div className="flex flex-row gap-3 text-sm text-white">
-              <button onClick={handleReset} className="bg-black/80">
-                Reset
-              </button>
-              <button onClick={handleNewGame} className="bg-black/80">
-                New Game
-              </button>
-            </div>
-          </div>
+          <GameStatus
+            status={status}
+            handleNewGame={handleNewGame}
+            handleReset={handleReset}
+          />
         )}
       </div>
     </>
