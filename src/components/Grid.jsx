@@ -16,7 +16,7 @@ const Cell = React.memo(function Cell({
       key={`cell-${row}-${col}`}
       type="text"
       className={clsx(
-        "h-[50px] w-[50px] cursor-default border-none text-center text-2xl outline-none focus:bg-blue-400/50 focus:caret-transparent",
+        "h-[30px] w-[30px] cursor-default border-none text-center text-xl outline-none focus:bg-blue-400/50 focus:caret-transparent md:h-[50px] md:w-[50px] md:text-3xl",
         conflicts.has(`${row}-${col}-${cell}`)
           ? "bg-red-300 text-red-500"
           : isPrefilled
@@ -42,7 +42,7 @@ const Grid = ({
   conflicts,
 }) => {
   return (
-    <div className="rounded-lg bg-white p-3.5">
+    <div className="mb-5 rounded-lg bg-white p-3.5">
       <table className="border-collapse">
         <tbody>
           {board.map((row, row_index) => {

@@ -12,7 +12,7 @@ const Controls = ({
   numberCounts,
 }) => {
   return (
-    <div className="ml-5 flex flex-col">
+    <div className="flex flex-col md:ml-5">
       <div className="flex items-center justify-around text-xs">
         <p>
           <span className="font-bold text-[rgb(182,182,182)]">
@@ -31,7 +31,7 @@ const Controls = ({
         <button
           onClick={handlePencilMark}
           className={clsx(
-            "mx-1.5 cursor-pointer transition-all duration-500 ease-in hover:bg-[#636363]",
+            "mx-1.5 cursor-pointer px-2.5 py-1.5 transition-all duration-300 ease-in hover:bg-[#636363] md:p-4",
             isPencilMark ? "bg-white" : "",
           )}
         >
@@ -39,25 +39,25 @@ const Controls = ({
         </button>
         <button
           onClick={handleReset}
-          className="mx-1.5 cursor-pointer transition-all duration-500 ease-in hover:bg-[#636363]"
+          className="mx-1.5 cursor-pointer px-2.5 py-1.5 transition-all duration-300 ease-in hover:bg-[#636363] md:p-4"
         >
           <RotateCcw />
         </button>
         <button
           onClick={handleErase}
           onMouseDown={(e) => e.preventDefault()}
-          className="mx-1.5 cursor-pointer transition-all duration-500 ease-in hover:bg-[#636363]"
+          className="mx-1.5 cursor-pointer px-2.5 py-1.5 transition-all duration-300 ease-in hover:bg-[#636363] md:p-4"
         >
           <Eraser />
         </button>
       </div>
       <button
         onClick={handleNewGame}
-        className="m-1.5 flex cursor-pointer items-center justify-center bg-white font-bold text-black/80 transition-all duration-400 ease-out hover:bg-[#333333] hover:text-white"
+        className="m-1.5 flex cursor-pointer items-center justify-center bg-white px-2.5 py-1.5 font-bold text-black/80 transition-all duration-400 ease-out hover:bg-[#333333] hover:text-white md:px-2.5 md:py-4"
       >
-        <Grid3x3 className="mr-2" /> New Game
+        <Grid3x3 className="mr-2 text-sm md:text-2xl" /> New Game
       </button>
-      <div className="mx-1.5 my-2 grid grid-cols-3 grid-rows-3 gap-3">
+      <div className="mx-1.5 my-2 flex flex-row gap-1.75 md:grid md:grid-cols-3 md:grid-rows-3">
         {Object.entries(numberCounts).map(([num, count]) => {
           const isComplete = count === 9;
           return (
@@ -67,7 +67,7 @@ const Controls = ({
               onMouseDown={(e) => e.preventDefault()}
               disabled={isComplete}
               className={clsx(
-                "flex aspect-square items-center justify-center bg-black/50 text-2xl transition-all duration-500 ease-in hover:bg-[#636363]",
+                "flex aspect-square items-center justify-center bg-black/50 px-1 py-3.5 text-xl transition-all duration-300 ease-in hover:bg-[#636363] md:px-2.5 md:py-5",
                 isComplete
                   ? "cursor-default bg-transparent opacity-50 hover:bg-transparent"
                   : "cursor-pointer",
@@ -75,11 +75,11 @@ const Controls = ({
             >
               {isComplete ? (
                 <Check
-                  className="animate-scale-in h-6 w-6 rounded-full bg-[#636363] p-1 text-white"
+                  className="animate-scale-in h-3 w-3 rounded-full bg-[#636363] p-1 text-white md:h-6 md:w-6"
                   strokeWidth={3}
                 />
               ) : (
-                <span className="flex h-6 w-6 items-center justify-center">
+                <span className="flex h-3 w-3 items-center justify-center md:h-6 md:w-6">
                   {num}
                 </span>
               )}

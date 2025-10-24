@@ -88,7 +88,7 @@ const App = () => {
     setMistakeCount((prev) => {
       total = prev + 1;
       if (total >= 5) {
-        setStatus("💀 Game Over!! You failed..");
+        setStatus("💀 Game Over!! You failed...");
       }
 
       return total;
@@ -172,8 +172,10 @@ const App = () => {
 
   return (
     <>
-      <h1 className="mb-5 text-center font-bold">Classic Sudoku</h1>
-      <div className="flex flex-row items-center justify-center">
+      <h1 className="mb-5 text-center text-2xl font-semibold md:text-3xl md:font-bold">
+        Classic Sudoku
+      </h1>
+      <div className="flex flex-col items-center justify-center md:flex-row">
         {!board ? (
           <Loading />
         ) : (
