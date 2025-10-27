@@ -28,7 +28,15 @@ export const fetchBoard = async ({
     setDifficulty(difficulty);
     setPuzzle(puzzle);
     setSolution(solution);
-    setBoard(puzzle.map((row) => [...row]));
+    setBoard(
+      puzzle.map((row) =>
+        row.map((cell) => ({
+          value: cell,
+          notes: [],
+        })),
+      ),
+    );
+
     setSelected(null);
   } catch (e) {
     setError("Failed to fetch sudoku puzzle.", e);
