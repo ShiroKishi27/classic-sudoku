@@ -28,7 +28,6 @@ const App = () => {
     8: 0,
     9: 0,
   });
-
   useEffect(() => {
     if (hasFetchedRef.current) return;
     hasFetchedRef.current = true;
@@ -54,8 +53,8 @@ const App = () => {
 
     board.forEach((row, r) => {
       row.forEach((cell, c) => {
-        if (cell !== null && cell === solution[r][c]) {
-          newCounts[cell] += 1;
+        if (cell.value !== null && cell.value === solution[r][c]) {
+          newCounts[cell.value] += 1;
         }
       });
     });
@@ -64,20 +63,51 @@ const App = () => {
   }, [board, solution]);
 
   const handleInput = (row, col, value) => {
-    // TODO: Implement input for notes/pencil marks
-    const digit = value.slice(-1);
+    const digit = parseInt(value.slice(-1), 10);
+    if (isNaN(digit) || digit < 1 || digit > 9) return;
+
     setBoard((prevBoard) => {
-      const newBoard = prevBoard.map((r, ri) =>
-        r.map((cell, ci) =>
-          ri === row && ci === col
-            ? digit >= "1" && digit <= "9"
-              ? cell === parseInt(digit, 10)
-                ? null
-                : parseInt(digit, 10)
-              : null
-            : cell,
-        ),
+      // Deep copy of board
+      let newBoard = prevBoard.map((r) =>
+        r.map((c) => ({ ...c, notes: [...c.notes] })),
       );
+
+      const cell = newBoard[row][col];
+
+      if (isPencilMode) {
+        // ✏️ Pencil Mode — toggle note
+        const alreadyNoted = cell.notes.includes(digit);
+        cell.notes = alreadyNoted
+          ? cell.notes.filter((n) => n !== digit)
+          : [...cell.notes, digit].sort((a, b) => a - b);
+      } else {
+        // 🧩 Normal Mode — fill value and clear notes
+        const newValue = cell.value === digit ? null : digit;
+        cell.value = newValue;
+        cell.notes = [];
+
+        // 🧹 Auto Note Cleanup only if a number is placed (not cleared)
+        if (newValue) {
+          const boxRow = Math.floor(row / 3) * 3;
+          const boxCol = Math.floor(col / 3) * 3;
+
+          for (let r = 0; r < 9; r++) {
+            for (let c = 0; c < 9; c++) {
+              const inSameRow = r === row;
+              const inSameCol = c === col;
+              const inSameBox =
+                Math.floor(r / 3) === Math.floor(row / 3) &&
+                Math.floor(c / 3) === Math.floor(col / 3);
+
+              if (inSameRow || inSameCol || inSameBox) {
+                newBoard[r][c].notes = newBoard[r][c].notes.filter(
+                  (n) => n !== newValue,
+                );
+              }
+            }
+          }
+        }
+      }
 
       return newBoard;
     });
@@ -110,16 +140,17 @@ const App = () => {
 
       board.forEach((row, r) => {
         row.forEach((cell, c) => {
-          if (cell !== null && cell !== solution[r][c]) {
-            newConflicts.add(`${r}-${c}-${cell}`); // store "r-c" as unique key
-            if (!conflicts.has(`${r}-${c}-${cell}`)) {
+          if (cell.value !== null && cell.value !== solution[r][c]) {
+            newConflicts.add(`${r}-${c}-${cell.value}`); // store "r-c" as unique key
+            if (!conflicts.has(`${r}-${c}-${cell.value}`)) {
               handleMistake();
             }
           }
         });
       });
       const isSolved =
-        newConflicts.size === 0 && board.flat().every((cell) => cell !== null);
+        newConflicts.size === 0 &&
+        board.flat().every((cell) => cell.value !== null);
       if (isSolved) setStatus("🎉 Congratulations! You solved it!");
 
       setConflicts(newConflicts);
@@ -128,7 +159,14 @@ const App = () => {
   );
 
   const handleReset = () => {
-    setBoard(puzzle.map((row) => [...row]));
+    setBoard(
+      puzzle.map((row) =>
+        row.map((cell) => ({
+          value: cell,
+          notes: [],
+        })),
+      ),
+    );
     setStatus("");
     setSelected(null);
     setConflicts(new Set());
@@ -144,7 +182,9 @@ const App = () => {
 
     setBoard((prev) => {
       const updated = prev.map((row, r) =>
-        row.map((cell, c) => (r === row_idx && c === col_idx ? null : cell)),
+        row.map((cell, c) =>
+          r === row_idx && c === col_idx ? { value: null, notes: [] } : cell,
+        ),
       );
       return updated;
     });
