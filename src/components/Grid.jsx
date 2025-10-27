@@ -1,35 +1,59 @@
-import clsx from "clsx";
 import React, { memo } from "react";
+import clsx from "clsx";
 
-// Memoized Cell so React doesn't recreate every input on each keystroke
 const Cell = React.memo(function Cell({
   cell,
   row,
   col,
   isPrefilled,
   conflicts,
-  onKeyDown,
+  isSameValue,
+  inSameRow,
+  inSameCol,
+  inSameBox,
+  isSelected,
   onFocus,
+  onKeyDown,
 }) {
+  const borderClasses = clsx(
+    "border border-gray-400",
+    row % 3 === 0 && "border-t-2 border-t-black",
+    col % 3 === 0 && "border-l-2 border-l-black",
+    row === 8 && "border-b-2 border-b-black",
+    col === 8 && "border-r-2 border-r-black",
+  );
+
   return (
-    <input
-      key={`cell-${row}-${col}`}
-      type="text"
+    <div
+      tabIndex={0}
+      onFocus={onFocus}
+      onKeyDown={onKeyDown}
       className={clsx(
-        "h-[30px] w-[30px] cursor-default border-none text-center text-xl outline-none focus:bg-blue-400/50 focus:caret-transparent md:h-[50px] md:w-[50px] md:text-3xl",
-        conflicts.has(`${row}-${col}-${cell}`)
+        "relative flex aspect-square cursor-default items-center justify-center text-center text-xl transition-colors outline-none select-none md:text-3xl",
+        borderClasses,
+        // ✅ Same highlight logic from your table version:
+        (inSameRow || inSameCol || inSameBox) && "bg-blue-200/70",
+        isSameValue && cell.value !== null && "bg-blue-400/50",
+        isSelected && "bg-blue-500/70",
+        conflicts.has(`${row}-${col}-${cell.value}`)
           ? "bg-red-300 text-red-500"
           : isPrefilled
             ? "text-gray-800"
             : "text-blue-700",
       )}
-      maxLength={1}
-      value={cell ?? ""}
-      readOnly={isPrefilled}
-      onFocus={onFocus}
-      onKeyDown={onKeyDown}
-      onChange={() => {}}
-    />
+    >
+      {cell.value ? (
+        <span>{cell.value}</span>
+      ) : cell.notes?.length ? (
+        <div className="absolute inset-0 grid grid-cols-3 grid-rows-3 text-[10px] text-gray-500 md:text-xs">
+          {Array.from({ length: 9 }, (_, i) => (
+            <span key={i} className="flex items-center justify-center">
+              {cell.notes.includes(i + 1) ? i + 1 : ""}
+            </span>
+          ))}
+        </div>
+      ) : null}
+    </div>
   );
 });
 
@@ -41,73 +65,64 @@ const Grid = ({
   handleInput,
   conflicts,
 }) => {
+  // 🟦 Get value of the currently selected cell (for same-number highlighting)
+  const selectedValue =
+    selected && board?.[selected[0]]?.[selected[1]]?.value !== null
+      ? board[selected[0]][selected[1]].value
+      : null;
+
   return (
-    <div className="mb-5 rounded-lg bg-white p-3.5">
-      <table className="border-collapse">
-        <tbody>
-          {board.map((row, row_index) => {
+    <div className="mx-auto w-fit rounded-lg bg-white p-3.5 shadow">
+      <div className="grid grid-cols-9 grid-rows-9">
+        {board.map((row, r) =>
+          row.map((cell, c) => {
+            const isPrefilled = puzzle[r][c] !== null;
+
+            // 🟨 Highlight same number if selected cell has value
+            const isSameValue =
+              selectedValue !== null && cell.value === selectedValue;
+
+            const isSelected =
+              selected && selected[0] === r && selected[1] === c;
+
+            const inSameRow = selected && selected[0] === r;
+            const inSameCol = selected && selected[1] === c;
+            const inSameBox =
+              selected &&
+              Math.floor(selected[0] / 3) === Math.floor(r / 3) &&
+              Math.floor(selected[1] / 3) === Math.floor(c / 3);
+
             return (
-              <tr
-                key={row_index}
-                className="border border-solid border-gray-400 nth-1:border-t-3 nth-1:border-t-black nth-[3n]:border-b-3 nth-[3n]:border-b-black"
-              >
-                {row.map((cell, col_index) => {
-                  const isPrefilled = puzzle[row_index][col_index] !== null;
-                  return (
-                    <td
-                      key={col_index}
-                      className={clsx(
-                        "border border-solid border-gray-400 p-0 nth-1:border-l-3 nth-1:border-l-black nth-[3n]:border-r-3 nth-[3n]:border-r-black",
-                        selected &&
-                          row_index === selected[0] &&
-                          "bg-blue-200/70",
-                        selected &&
-                          col_index === selected[1] &&
-                          "bg-blue-200/70",
-                        selected &&
-                          Math.floor(row_index / 3) ===
-                            Math.floor(selected[0] / 3) &&
-                          Math.floor(col_index / 3) ===
-                            Math.floor(selected[1] / 3) &&
-                          "bg-blue-200/70",
-                        selected &&
-                          board?.[selected?.[0]]?.[selected?.[1]] === cell &&
-                          cell !== null &&
-                          "bg-blue-400/50",
-                      )}
-                    >
-                      <Cell
-                        key={`cell-${row_index}-${col_index}`}
-                        cell={cell}
-                        row={row_index}
-                        col={col_index}
-                        isPrefilled={isPrefilled}
-                        conflicts={conflicts}
-                        onFocus={() => {
-                          setSelected([row_index, col_index]);
-                        }}
-                        onKeyDown={(e) => {
-                          if (isPrefilled) return;
-                          if (/^[1-9]$/.test(e.key)) {
-                            e.preventDefault(); // stop double input
-                            handleInput(row_index, col_index, e.key);
-                          } else if (
-                            e.key === "Backspace" ||
-                            e.key === "Delete"
-                          ) {
-                            e.preventDefault();
-                            handleInput(row_index, col_index, "");
-                          }
-                        }}
-                      />
-                    </td>
-                  );
-                })}
-              </tr>
+              <Cell
+                key={`cell-${r}-${c}`}
+                cell={cell}
+                row={r}
+                col={c}
+                isPrefilled={isPrefilled}
+                conflicts={conflicts}
+                selected={selected}
+                onFocus={() => setSelected([r, c])}
+                onKeyDown={(e) => {
+                  if (isPrefilled) return;
+                  if (/^[1-9]$/.test(e.key)) {
+                    e.preventDefault();
+                    handleInput(r, c, e.key);
+                  } else if (["Backspace", "Delete"].includes(e.key)) {
+                    e.preventDefault();
+                    handleInput(r, c, null);
+                  }
+                }}
+                // ✅ Extra props for highlighting
+                isSameValue={isSameValue}
+                inSameRow={inSameRow}
+                inSameCol={inSameCol}
+                inSameBox={inSameBox}
+                isSelected={isSelected}
+              />
             );
-          })}
-        </tbody>
-      </table>
+          }),
+        )}
+      </div>
     </div>
   );
 };
