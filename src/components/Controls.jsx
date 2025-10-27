@@ -12,7 +12,7 @@ const Controls = ({
   numberCounts,
 }) => {
   return (
-    <div className="flex flex-col md:ml-5">
+    <div className="mt-4 flex flex-col md:mt-0 md:ml-5">
       <div className="flex items-center justify-around text-xs">
         <p>
           <span className="font-bold text-[rgb(182,182,182)]">
@@ -30,6 +30,7 @@ const Controls = ({
       <div className="my-1.5 flex items-stretch justify-center gap-2">
         <button
           onClick={handlePencilMark}
+          onMouseDown={(e) => e.preventDefault()}
           className={clsx(
             "mx-1.5 cursor-pointer px-2.5 py-1.5 transition-all duration-300 ease-in hover:bg-[#636363] md:p-4",
             isPencilMark ? "bg-white" : "",
@@ -53,11 +54,11 @@ const Controls = ({
       </div>
       <button
         onClick={handleNewGame}
-        className="m-1.5 flex cursor-pointer items-center justify-center bg-white px-2.5 py-1.5 font-bold text-black/80 transition-all duration-400 ease-out hover:bg-[#333333] hover:text-white md:px-2.5 md:py-4"
+        className="flex cursor-pointer items-center justify-center bg-white px-2.5 py-1.5 font-bold text-black/80 transition-all duration-400 ease-out hover:bg-[#333333] hover:text-white md:px-2 md:py-3"
       >
         <Grid3x3 className="mr-2 text-sm md:text-2xl" /> New Game
       </button>
-      <div className="mx-1.5 my-2 flex flex-row gap-1.75 md:grid md:grid-cols-3 md:grid-rows-3">
+      <div className="mt-3 flex flex-row gap-1.75 md:grid md:grid-cols-3 md:grid-rows-3">
         {Object.entries(numberCounts).map(([num, count]) => {
           const isComplete = count === 9;
           return (
