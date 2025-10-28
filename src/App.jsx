@@ -75,18 +75,18 @@ const App = () => {
       const cell = newBoard[row][col];
 
       if (isPencilMode) {
-        // ✏️ Pencil Mode — toggle note
+        // Pencil Mode — toggle note
         const alreadyNoted = cell.notes.includes(digit);
         cell.notes = alreadyNoted
           ? cell.notes.filter((n) => n !== digit)
           : [...cell.notes, digit].sort((a, b) => a - b);
       } else {
-        // 🧩 Normal Mode — fill value and clear notes
+        // Normal Mode — fill value and clear notes
         const newValue = cell.value === digit ? null : digit;
         cell.value = newValue;
         cell.notes = [];
 
-        // 🧹 Auto Note Cleanup only if a number is placed (not cleared)
+        // Auto Note Cleanup only if a number is placed (not cleared)
         if (newValue) {
           const boxRow = Math.floor(row / 3) * 3;
           const boxCol = Math.floor(col / 3) * 3;
@@ -204,6 +204,7 @@ const App = () => {
       setDifficulty,
     });
     setMistakeCount(0);
+    setIsPencilMode(false);
   };
 
   if (error) {

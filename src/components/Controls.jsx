@@ -80,7 +80,12 @@ const Controls = ({
                   strokeWidth={3}
                 />
               ) : (
-                <span className="flex h-3 w-3 items-center justify-center md:h-6 md:w-6">
+                <span
+                  className={clsx(
+                    "flex h-3 w-3 items-center justify-center md:h-6 md:w-6",
+                    isPencilMark ? "text-sm text-gray-500" : "text-blue-700/70",
+                  )}
+                >
                   {num}
                 </span>
               )}
