@@ -16,9 +16,9 @@ const Cell = React.memo(function Cell({
   onKeyDown,
 }) {
   const borderClasses = clsx(
-    "border border-gray-400",
-    row % 3 === 0 && "border-t-2 border-t-black",
-    col % 3 === 0 && "border-l-2 border-l-black",
+    "border-gray-500",
+    row % 3 === 0 ? "border-t-2 border-t-black" : "border-t border-t-gray-500",
+    col % 3 === 0 ? "border-l-2 border-l-black" : "border-l border-l-gray-500",
     row === 8 && "border-b-2 border-b-black",
     col === 8 && "border-r-2 border-r-black",
   );
@@ -31,7 +31,8 @@ const Cell = React.memo(function Cell({
       className={clsx(
         "relative flex aspect-square cursor-default items-center justify-center text-center text-xl transition-colors outline-none select-none md:text-3xl",
         borderClasses,
-        // ✅ Same highlight logic from your table version:
+        // highlight logic same box, same column, same row, and same cell value
+        // highlight logic conflicts
         (inSameRow || inSameCol || inSameBox) && "bg-blue-200/70",
         isSameValue && cell.value !== null && "bg-blue-400/50",
         isSelected && "bg-blue-500/70",
@@ -65,7 +66,7 @@ const Grid = ({
   handleInput,
   conflicts,
 }) => {
-  // 🟦 Get value of the currently selected cell (for same-number highlighting)
+  // Get value of the currently selected cell (for same-number highlighting)
   const selectedValue =
     selected && board?.[selected[0]]?.[selected[1]]?.value !== null
       ? board[selected[0]][selected[1]].value
@@ -78,7 +79,7 @@ const Grid = ({
           row.map((cell, c) => {
             const isPrefilled = puzzle[r][c] !== null;
 
-            // 🟨 Highlight same number if selected cell has value
+            // Highlight same number if selected cell has value
             const isSameValue =
               selectedValue !== null && cell.value === selectedValue;
 
@@ -112,7 +113,7 @@ const Grid = ({
                     handleInput(r, c, null);
                   }
                 }}
-                // ✅ Extra props for highlighting
+                // Extra props for highlighting
                 isSameValue={isSameValue}
                 inSameRow={inSameRow}
                 inSameCol={inSameCol}
