@@ -1,7 +1,11 @@
 import React from "react";
 
-const Loading = () => {
-  return (
+const Loading = ({ error }) => {
+  return error ? (
+    <div className="flex h-[532px] w-[346px] items-center justify-center rounded-lg bg-[#636363] text-2xl font-semibold text-white/80 uppercase md:h-[496px] md:w-[823px]">
+      {error}
+    </div>
+  ) : (
     <div className="flex h-[532px] w-[346px] items-center justify-center rounded-lg bg-[#636363] text-2xl font-semibold text-white/80 md:h-[496px] md:w-[823px]">
       Grid Loading...
     </div>
