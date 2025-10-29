@@ -17,17 +17,7 @@ const App = () => {
   const [conflicts, setConflicts] = useState(new Set());
   const [mistakeCount, setMistakeCount] = useState(0);
   const hasFetchedRef = useRef(false);
-  const [numberCounts, setNumberCounts] = useState({
-    1: 0,
-    2: 0,
-    3: 0,
-    4: 0,
-    5: 0,
-    6: 0,
-    7: 0,
-    8: 0,
-    9: 0,
-  });
+  const [numberCounts, setNumberCounts] = useState(null);
   useEffect(() => {
     if (hasFetchedRef.current) return;
     hasFetchedRef.current = true;
@@ -65,6 +55,7 @@ const App = () => {
   const handleInput = (row, col, value) => {
     const digit = parseInt(value.slice(-1), 10);
     if (isNaN(digit) || digit < 1 || digit > 9) return;
+    if (digit && numberCounts[digit] === 9) return;
 
     setBoard((prevBoard) => {
       // Deep copy of board
@@ -207,10 +198,6 @@ const App = () => {
     setIsPencilMode(false);
   };
 
-  if (error) {
-    return <div>{error}</div>;
-  }
-
   return (
     <>
       <h1 className="mb-5 text-center text-2xl font-semibold md:text-3xl md:font-bold">
@@ -218,7 +205,7 @@ const App = () => {
       </h1>
       <div className="flex flex-col items-center justify-center md:flex-row">
         {!board ? (
-          <Loading />
+          <Loading error={error} />
         ) : (
           <>
             <Grid
