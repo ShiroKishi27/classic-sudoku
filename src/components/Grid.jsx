@@ -1,4 +1,4 @@
-import React, { memo } from "react";
+import React, { useEffect, useRef, useCallback } from "react";
 import clsx from "clsx";
 
 const Cell = React.memo(function Cell({
@@ -15,6 +15,7 @@ const Cell = React.memo(function Cell({
   onFocus,
   onKeyDown,
 }) {
+  const ref = useRef(null);
   const borderClasses = clsx(
     "border-gray-500",
     row % 3 === 0 ? "border-t-2 border-t-black" : "border-t border-t-gray-500",
@@ -23,8 +24,15 @@ const Cell = React.memo(function Cell({
     col === 8 && "border-r-2 border-r-black",
   );
 
+  useEffect(() => {
+    if (isSelected && ref.current) {
+      ref.current.focus();
+    }
+  }, [isSelected]);
+
   return (
     <div
+      ref={ref}
       tabIndex={0}
       onFocus={onFocus}
       onKeyDown={onKeyDown}
@@ -65,12 +73,21 @@ const Grid = ({
   setSelected,
   handleInput,
   conflicts,
+  handleArrowKey,
+  handleErase,
 }) => {
   // Get value of the currently selected cell (for same-number highlighting)
   const selectedValue =
     selected && board?.[selected[0]]?.[selected[1]]?.value !== null
       ? board[selected[0]][selected[1]].value
       : null;
+
+  const handleFocus = useCallback(
+    (r, c) => {
+      setSelected([r, c]);
+    },
+    [setSelected],
+  );
 
   return (
     <div className="mx-auto w-fit rounded-lg bg-white p-3.5 shadow">
@@ -101,16 +118,25 @@ const Grid = ({
                 col={c}
                 isPrefilled={isPrefilled}
                 conflicts={conflicts}
-                selected={selected}
-                onFocus={() => setSelected([r, c])}
+                onFocus={() => handleFocus(r, c)}
                 onKeyDown={(e) => {
-                  if (isPrefilled) return;
-                  if (/^[1-9]$/.test(e.key)) {
+                  // if (isPrefilled) return;
+                  if (!isPrefilled && /^[1-9]$/.test(e.key)) {
                     e.preventDefault();
                     handleInput(r, c, e.key);
                   } else if (["Backspace", "Delete"].includes(e.key)) {
                     e.preventDefault();
-                    handleInput(r, c, null);
+                    handleErase();
+                  } else if (
+                    [
+                      "ArrowUp",
+                      "ArrowDown",
+                      "ArrowLeft",
+                      "ArrowRight",
+                    ].includes(e.key)
+                  ) {
+                    e.preventDefault();
+                    handleArrowKey(e.key);
                   }
                 }}
                 // Extra props for highlighting
