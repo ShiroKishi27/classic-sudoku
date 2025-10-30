@@ -5,6 +5,7 @@ import Controls from "./components/Controls";
 import { fetchBoard } from "./fetchBoard";
 import Loading from "./components/Loading";
 import GameStatus from "./components/GameStatus";
+import ThemeControl from "./components/ThemeControl";
 const App = () => {
   const [board, setBoard] = useState(null);
   const [puzzle, setPuzzle] = useState(null);
@@ -123,6 +124,31 @@ const App = () => {
     handleInput(row, col, value);
   };
 
+  const handleArrowKey = (key) => {
+    if (!selected) return;
+    const [row, col] = selected;
+    let newRow = row;
+    let newCol = col;
+
+    switch (key) {
+      case "ArrowUp":
+        newRow = row > 0 ? row - 1 : 8;
+        break;
+      case "ArrowDown":
+        newRow = row < 8 ? row + 1 : 0;
+        break;
+      case "ArrowLeft":
+        newCol = col > 0 ? col - 1 : 8;
+        break;
+      case "ArrowRight":
+        newCol = col < 8 ? col + 1 : 0;
+        break;
+      default:
+        return;
+    }
+    setSelected([newRow, newCol]);
+  };
+
   const handleCheck = useCallback(
     (board) => {
       if (!solution) return;
@@ -171,14 +197,21 @@ const App = () => {
 
     if (puzzle[row_idx][col_idx] !== null) return;
 
-    setBoard((prev) => {
-      const updated = prev.map((row, r) =>
-        row.map((cell, c) =>
-          r === row_idx && c === col_idx ? { value: null, notes: [] } : cell,
-        ),
-      );
-      return updated;
-    });
+    setBoard((prevBoard) =>
+      prevBoard.map((r, ri) =>
+        r.map((cell, ci) => {
+          if (ri === row_idx && ci === col_idx) {
+            // If pencil mode, clear only notes
+            if (isPencilMode) {
+              return { ...cell, notes: [] };
+            }
+            // Normal mode — clear value and notes
+            return { value: null, notes: [] };
+          }
+          return cell;
+        }),
+      ),
+    );
   };
 
   const handlePencilMark = () => {
@@ -200,8 +233,8 @@ const App = () => {
 
   return (
     <>
-      <h1 className="mb-5 text-center text-2xl font-semibold md:text-3xl md:font-bold">
-        Classic Sudoku
+      <h1 className="mb-5 flex items-center justify-center text-2xl font-semibold md:text-3xl md:font-bold">
+        Classic Sudoku <ThemeControl />
       </h1>
       <div className="flex flex-col items-center justify-center md:flex-row">
         {!board ? (
@@ -215,6 +248,8 @@ const App = () => {
               setSelected={setSelected}
               handleInput={handleInput}
               conflicts={conflicts}
+              handleArrowKey={handleArrowKey}
+              handleErase={handleErase}
             />
 
             <Controls
