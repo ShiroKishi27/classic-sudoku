@@ -56,7 +56,7 @@ const Controls = ({
       </div>
       <button
         onClick={handleNewGame}
-        className="flex cursor-pointer items-center justify-center bg-white px-2.5 py-1.5 font-bold text-black/80 transition-all duration-400 ease-out hover:bg-[#333333] hover:text-white md:px-2 md:py-3"
+        className="flex cursor-pointer items-center justify-center bg-white px-2.5 py-1.5 font-bold text-black/80 transition-all duration-400 ease-out hover:bg-[#636363] hover:text-white md:px-2 md:py-3"
       >
         <Grid3x3 className="mr-2 text-sm md:text-2xl" /> New Game
       </button>
@@ -86,7 +86,7 @@ const Controls = ({
                   <span
                     className={clsx(
                       "flex h-3 w-3 items-center justify-center md:h-6 md:w-6",
-                      isPencilMark ? "text-sm text-gray-500" : "text-cyan-400",
+                      isPencilMark ? "text-sm text-gray-500" : "text-sky-400",
                     )}
                   >
                     {num}
