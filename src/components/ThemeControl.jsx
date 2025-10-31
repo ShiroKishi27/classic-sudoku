@@ -1,11 +1,30 @@
 import { Moon, Sun } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const ThemeControl = () => {
-  const [isDark, setIsDark] = useState(true);
+  const [isLight, setIsLight] = useState(false);
+
+  useEffect(() => {
+    const savedTheme = localStorage.getItem("theme");
+    if (savedTheme === "light") {
+      setIsLight(true);
+      document.documentElement.classList.add("light");
+    } else {
+      setIsLight(false);
+      document.documentElement.classList.remove("light");
+    }
+  }, []);
 
   const themeToggle = () => {
-    setIsDark((p) => !p);
+    if (isLight) {
+      document.documentElement.classList.remove("light");
+      localStorage.setItem("theme", "dark");
+      setIsLight(false);
+    } else {
+      document.documentElement.classList.add("light");
+      localStorage.setItem("theme", "light");
+      setIsLight(true);
+    }
   };
 
   return (
@@ -14,10 +33,10 @@ const ThemeControl = () => {
         onClick={themeToggle}
         className="relative left-10 flex items-center justify-center"
       >
-        {isDark ? (
-          <Moon className="flex h-6 w-6 items-center justify-center text-white" />
-        ) : (
+        {isLight ? (
           <Sun className="flex h-6 w-6 items-center justify-center text-amber-500" />
+        ) : (
+          <Moon className="flex h-6 w-6 items-center justify-center text-white" />
         )}
       </button>
     </div>
