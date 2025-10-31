@@ -9,6 +9,8 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  color-scheme: dark;
 }
 
 @theme {
@@ -46,16 +48,19 @@
   }
 
   .light {
-    --clues: hsl(0, 0%, 100%, 0.6);
-    --entry: hsl(196, 100%, 50%);
-    --mistake: hsl(357, 96%, 58%);
-    --new-game-primary: hsl(0, 0%, 0%, 0.8);
-    --new-game-secondary: hsl(0, 0%, 100%);
-    --grid-lines: hsl(216, 15%, 34%);
-    --grid-btn: hsl(0, 0%, 0%, 0.5);
-    --foreground: hsl(0, 0%, 39%);
+    --clues: hsla(0, 0%, 0%, 0.7); /* black/70 */
+    --entry: hsl(225, 84%, 49%); /* sky-500 */
+    --mistake-primary: hsl(357, 96%, 40%); /* red-600 */
+    --mistake-secondary: hsl(0, 100%, 75%); /* red-300 */
+    --new-game-primary: hsla(0, 0%, 100%, 0.9); /* white/90 */
+    --new-game-secondary: hsl(0, 0%, 0%); /* black */
+    --highlight: hsla(212, 100%, 66%); /* blue-400 */
+    --highlight-secondary: hsla(212, 100%, 66%, 0.5); /* text-blue-400/50 */
+    --grid-lines: hsl(0, 0%, 0%, 0.4); /* black/40 */
+    --grid-btn: hsla(0, 0%, 100%); /* white */
+    --foreground: hsl(0, 0%, 25%); /* gray-700 */
 
-    background-color: hsl(0, 0%, 95%);
+    background-color: hsl(0, 0%, 85%);
     color: hsl(0, 0%, 0%, 0.8);
   }
 }
@@ -96,16 +101,6 @@ button {
 .animate-scale-in {
   animation: scale-in 0.5s ease-out;
 }
-/* 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+
+/* @media (prefers-color-scheme: light) {
 } */
