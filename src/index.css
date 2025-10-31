@@ -5,14 +5,59 @@
   line-height: 1.5;
   font-weight: 400;
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+@theme {
+  --color-clues: var(--clues);
+  --color-entry: var(--entry);
+  --color-mistake-primary: var(--mistake-primary);
+  --color-mistake-secondary: var(--mistake-secondary);
+  --color-new-game-primary: var(--new-game-primary);
+  --color-new-game-secondary: var(--new-game-secondary);
+
+  --color-highlight: var(--highlight);
+  --color-highlight-secondary: var(--highlight-secondary);
+
+  --color-grid-lines: var(--grid-lines);
+  --color-grid-btn: var(--grid-btn);
+  --color-foreground: var(--foreground);
+}
+
+@layer base {
+  :root {
+    --clues: hsla(0, 0%, 100%, 0.6); /*white/60*/
+    --entry: hsl(196, 100%, 50%); /*sky-400*/
+    --mistake-primary: hsl(357, 96%, 58%); /*red-500*/
+    --mistake-secondary: hsl(0, 100%, 82%); /*red-300*/
+    --new-game-primary: hsla(0, 0%, 0%, 0.8); /*black/80*/
+    --new-game-secondary: hsl(0, 0%, 100%); /*white*/
+    --highlight: hsla(247, 84%, 50%, 0.6); /*indigo-600/60*/
+    --highlight-secondary: hsla(235, 100%, 74%, 0.3); /*indigo-400/30*/
+    --grid-lines: hsl(216, 15%, 34%); /*gray-600 */
+    --grid-btn: hsla(0, 0%, 0%, 0.5); /*black/50*/
+    --foreground: hsl(0, 0%, 39%); /*#636363*/
+
+    background-color: hsl(0, 0%, 14%);
+    color: hsla(0, 0%, 100%, 0.8);
+  }
+
+  .light {
+    --clues: hsl(0, 0%, 100%, 0.6);
+    --entry: hsl(196, 100%, 50%);
+    --mistake: hsl(357, 96%, 58%);
+    --new-game-primary: hsl(0, 0%, 0%, 0.8);
+    --new-game-secondary: hsl(0, 0%, 100%);
+    --grid-lines: hsl(216, 15%, 34%);
+    --grid-btn: hsl(0, 0%, 0%, 0.5);
+    --foreground: hsl(0, 0%, 39%);
+
+    background-color: hsl(0, 0%, 95%);
+    color: hsl(0, 0%, 0%, 0.8);
+  }
 }
 
 a {
