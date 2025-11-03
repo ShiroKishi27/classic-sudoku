@@ -49,7 +49,7 @@
 
   .light {
     --clues: hsla(0, 0%, 0%, 0.7); /* black/70 */
-    --entry: hsl(225, 84%, 49%); /* sky-500 */
+    --entry: hsl(225, 84%, 49%);
     --mistake-primary: hsl(357, 96%, 40%); /* red-600 */
     --mistake-secondary: hsl(0, 100%, 75%); /* red-300 */
     --new-game-primary: hsla(0, 0%, 100%, 0.9); /* white/90 */
