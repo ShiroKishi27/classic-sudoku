@@ -127,7 +127,10 @@ const Grid = ({
                 conflicts={conflicts}
                 onFocus={() => handleFocus(r, c)}
                 onKeyDown={(e) => {
-                  if (status) return;
+                  if (status) {
+                    if (e.key === "Tab") e.preventDefault();
+                    return; // stop everything
+                  }
                   // if (isPrefilled) return;
                   if (!isPrefilled && /^[1-9]$/.test(e.key)) {
                     e.preventDefault();

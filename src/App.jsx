@@ -250,6 +250,7 @@ const App = () => {
               conflicts={conflicts}
               handleArrowKey={handleArrowKey}
               handleErase={handleErase}
+              status={status}
             />
 
             <Controls
