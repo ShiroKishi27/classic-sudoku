@@ -5,7 +5,9 @@ import Controls from "./components/Controls";
 import { fetchBoard } from "./fetchBoard";
 import Loading from "./components/Loading";
 import GameStatus from "./components/GameStatus";
-import ThemeControl from "./components/ThemeControl";
+import Title from "./section/Title";
+import MainContent from "./section/MainContent";
+
 const App = () => {
   const [board, setBoard] = useState(null);
   const [puzzle, setPuzzle] = useState(null);
@@ -233,10 +235,8 @@ const App = () => {
 
   return (
     <>
-      <h1 className="mb-5 flex items-center justify-center text-2xl font-semibold md:text-3xl md:font-bold">
-        Classic Sudoku <ThemeControl />
-      </h1>
-      <div className="flex flex-col items-center justify-center md:flex-row">
+      <Title />
+      <MainContent>
         {!board ? (
           <Loading error={error} />
         ) : (
@@ -273,7 +273,7 @@ const App = () => {
             handleReset={handleReset}
           />
         )}
-      </div>
+      </MainContent>
     </>
   );
 };
