@@ -7,10 +7,10 @@ This project provides a smooth, modern, and intuitive Sudoku experience, allowin
 
 ## 📸 Preview
 
-![Sudoku App Dark Theme](./src/assets/img/Screenshot_29-11-2025_17627_localhost.jpeg)
 **Figure 1:** Sudoku App Dark Theme.
+![Sudoku App Dark Theme](./src/assets/img/Screenshot_29-11-2025_17627_localhost.jpeg)
+**Figure 2:** Sudoku App Light Theme.
 ![Sudoku App Light Theme](./src/assets/img/Screenshot_29-11-2025_17554_localhost.jpeg)
-**Figure 1:** Sudoku App Light Theme.
 
 ## 🚀 Features
 
