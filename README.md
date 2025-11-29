@@ -43,3 +43,10 @@ This project provides a smooth, modern, and intuitive Sudoku experience, allowin
 - **React Hooks** — for state and logic management
 
 ---
+
+## 🌟 Suggested Improvements
+
+- **Improve puzzle validation** by adding a uniqueness checker since the current API occasionally returns puzzles with multiple solutions.
+- **Include a difficulty selector UI** with more granular levels (e.g., Easy, Medium, Hard).
+- **Add sound effects** for inputs, mistakes, and puzzle completion.
+- **Add animations and transitions** when completing a box, column, row and the whole grid.
