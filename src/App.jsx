@@ -81,26 +81,26 @@ const App = () => {
         cell.notes = [];
 
         // Auto Note Cleanup only if a number is placed (not cleared)
-        if (newValue) {
-          const boxRow = Math.floor(row / 3) * 3;
-          const boxCol = Math.floor(col / 3) * 3;
+        // if (newValue) {
+        //   const boxRow = Math.floor(row / 3) * 3;
+        //   const boxCol = Math.floor(col / 3) * 3;
 
-          for (let r = 0; r < 9; r++) {
-            for (let c = 0; c < 9; c++) {
-              const inSameRow = r === row;
-              const inSameCol = c === col;
-              const inSameBox =
-                Math.floor(r / 3) === Math.floor(row / 3) &&
-                Math.floor(c / 3) === Math.floor(col / 3);
+        //   for (let r = 0; r < 9; r++) {
+        //     for (let c = 0; c < 9; c++) {
+        //       const inSameRow = r === row;
+        //       const inSameCol = c === col;
+        //       const inSameBox =
+        //         Math.floor(r / 3) === Math.floor(row / 3) &&
+        //         Math.floor(c / 3) === Math.floor(col / 3);
 
-              if (inSameRow || inSameCol || inSameBox) {
-                newBoard[r][c].notes = newBoard[r][c].notes.filter(
-                  (n) => n !== newValue,
-                );
-              }
-            }
-          }
-        }
+        //       if (inSameRow || inSameCol || inSameBox) {
+        //         newBoard[r][c].notes = newBoard[r][c].notes.filter(
+        //           (n) => n !== newValue,
+        //         );
+        //       }
+        //     }
+        //   }
+        // }
       }
 
       return newBoard;
